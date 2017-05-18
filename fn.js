@@ -1,49 +1,59 @@
+function main(String){
+    if(String === '')
+        return String;
+    let wordsString = splitString(String);
+    let wordsFrequency = countFreqy(wordsString);
+    let result = sortFrequency(wordsFrequency);
+    return format(result);
 
+}
 
 function splitString(String) {
-    if(String === '')
-        return '';
-    let i;
     String = String.replace(/(^\s*)|(\s*$)/g,'');
-    let wordsString = new Array();
-    wordsString = String.split(/\s+/);
+    let wordsString = String.split(/\s+/);
     return wordsString;
 }
 
 function countFreqy(wordsString){
-    var count = new Array;
-    var words = new Array;
-    var wordsFrequency = new Array;
-    var cou;
-    var wor = {};
-    var index;
+    let count = new Array;
+    let words = new Array;
+    let wordsFrequency = new Array;
+    let cou;
+    let wor = {};
+    let index;
     for(var i = 0, len = wordsString.length; i < len; i ++ ){
-       /* if( (index = words.indexOf(wordsString[i])) == -1){
+       /* 利用数组作媒介排序
+       if( (index = words.indexOf(wordsString[i])) === -1){
             words.push(wordsString[i]);
-            wordsFrequency.push({word: wordsString[i],count:1});
+            wordsFrequency.push({word: wordsString[i], count: 1});
         }else{
             wordsFrequency[index].count ++;
         }*/
 
-        if(wor[wordsString[i]] == undefined ){
-            wordsFrequency.push({word: wordsString[i],count:1});
+       //利用Json对象key值唯一排序
+        if(wor[wordsString[i]] === undefined ){
+            wordsFrequency.push({word: wordsString[i], count:1});
             wor[wordsString[i]] = wordsFrequency.length - 1;
-
         }else {
-
             wordsFrequency[wor[wordsString[i]]].count ++;
         }
     }
-
-    return format(wordsFrequency);
+    return wordsFrequency;
 }
 
-function sort(){
-
+function compare(property){
+    return function(a,b){
+        return a[property] - b[property];
+    }
 }
+function sortFrequency(wordsFrequency){
+    wordsFrequency.sort(compare('count'));
+    return wordsFrequency;
+}
+
 
 function  format( wordsFrequency) {
-    var result = ''
+    let result = '';
     for(var i = 0,len =  wordsFrequency.length; i < len; i ++){
         if(i > 0){
             result += '\r\n';
@@ -53,11 +63,10 @@ function  format( wordsFrequency) {
     return result;
 }
 
-
-
 module.exports = {
     splitString : splitString,
     countFreqy : countFreqy,
-    t1 : t1
+    sortFrequency : sortFrequency,
+    main: main
 }
 
